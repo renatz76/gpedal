@@ -606,7 +606,7 @@ export class GPedalDisplay {
       document.getElementById('grade').innerHTML = grade;
 
       document.getElementById('distance-unit-value').innerHTML = this.unit === 'imperial' ? 'mi' : '&nbsp;km';
-      document.getElementById('speed-unit-value').innerHTML = this.unit === 'imperial' ? 'mph' : 'kph';
+      document.getElementById('speed-unit-value').innerHTML = this.unit === 'imperial' ? 'mph' : 'k/h';
       document.getElementById('climb-container-value').innerHTML = this.unit === 'imperial' ? 'ft' : 'm';
 
       await timeout(1000);
