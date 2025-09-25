@@ -1,3 +1,5 @@
+//comments
+
 import {geocode, getPanoramaByLocation} from './lib/gmapPromises'; 
 import {timeout, dateFormat, hasStravaOauthTokens,
     getStravaOauthTokens, setStravaOauthTokens,
