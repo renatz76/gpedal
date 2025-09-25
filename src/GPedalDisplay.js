@@ -1,4 +1,4 @@
-import {geocode, getPanoramaByLocation} from './lib/gmapPromises';
+import {geocode, getPanoramaByLocation} from './lib/gmapPromises'; 
 import {timeout, dateFormat, hasStravaOauthTokens,
     getStravaOauthTokens, setStravaOauthTokens,
     removeStravaOauthTokens} from './lib/utils';
