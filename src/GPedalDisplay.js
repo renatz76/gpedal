@@ -396,7 +396,7 @@ export class GPedalDisplay {
           cad: this.ridingState.rpm
       });
 
-      if(tick % 5 === 0) {
+      if(tick % 1 === 0) {
         let streetview = this.miniMap.getStreetView();
         try {
           let data = await getPanoramaByLocation(this.ridingState.location, 50);
