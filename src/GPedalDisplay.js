@@ -396,7 +396,7 @@ export class GPedalDisplay {
           cad: this.ridingState.rpm
       });
 
-      if(tick % 1 === 0) {
+      if(tick % 5 === 0) {
         let streetview = this.miniMap.getStreetView();
         try {
           let data = await getPanoramaByLocation(this.ridingState.location, 50);
@@ -412,13 +412,60 @@ export class GPedalDisplay {
               google.maps.event.trigger(this.miniMap, 'resize');
             }
 
+           // this.miniMap.panTo(this.ridingState.location);
+           // if(this.ridingState.mapMode === 'MV') {
+           //   streetview.setPano(data.location.pano);
+           // } else {
+           //   streetview.setPosition(this.ridingState.location);
+           // }
+           // this.ridingState.mapMode = 'SV';
+
+            
             this.miniMap.panTo(this.ridingState.location);
-            if(this.ridingState.mapMode === 'MV') {
+            
+            // target camera state for this tick
+            const nextLat = this.ridingState.location.lat();
+            const nextLng = this.ridingState.location.lng();
+            const nextHeading = this.ridingState.point.heading;
+            const nextPitch = 0;
+            
+            if (this.ridingState.mapMode === 'MV') {
+              // first time switching from map view → street view on this tick
               streetview.setPano(data.location.pano);
-            } else {
+            
+              // snap POV for the very first show so we don't tween from a weird default
+              streetview.setPov({ heading: nextHeading, pitch: nextPitch, zoom: 1 });
+            
+              // ensure position is correct too
               streetview.setPosition(this.ridingState.location);
+            } else {
+              // already in street view → tween smoothly to the new location/heading
+              const currentPos = streetview.getPosition();
+              const currentPov = streetview.getPov();
+            
+              if (currentPos && currentPov) {
+                await tweenStreetView(
+                  streetview,
+                  { lat: currentPos.lat(), lng: currentPos.lng(), heading: currentPov.heading, pitch: currentPov.pitch ?? 0, zoom: currentPov.zoom ?? 1 },
+                  { lat: nextLat,          lng: nextLng,          heading: nextHeading,        pitch: nextPitch,            zoom: 1 },
+                  500 // ms (try 400–600ms to taste)
+                );
+              } else {
+                // safety fallback if Street View isn't initialized yet
+                streetview.setPov({ heading: nextHeading, pitch: nextPitch, zoom: 1 });
+                streetview.setPosition(this.ridingState.location);
+              }
             }
+            
             this.ridingState.mapMode = 'SV';
+
+
+
+
+
+              
+
+              
           }
         } catch (error) {
           // streetview not available
