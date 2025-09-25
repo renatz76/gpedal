@@ -10,7 +10,7 @@ import {credentials} from "./lib/oauth";
 import {RoutePoint} from "./Route";
 import {managedLocalStorage} from './lib/managedLocalStorage';
 import 'formdata-polyfill';
-
+import { tweenStreetView } from './tweenstreetview.js';
 
 export class GPedalDisplay {
   constructor({id, powerMeter, heartMeter, cadenceMeter, riderWeight, unit, routeName='', history=[], points, ridingState}) {
